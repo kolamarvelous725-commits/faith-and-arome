@@ -1,0 +1,11 @@
+# Design reference images & raw uploads — not used by the website
+*.png
+!assets/*.png
+*.jpeg
+!assets/*.jpeg
+*.MOV
+*.MP4
+!assets/*.mp4
+Timi_Dakolo_-_Obim_CeeNaija.com_.mp3
+package-lock.json
+assets/storyexport.mov
