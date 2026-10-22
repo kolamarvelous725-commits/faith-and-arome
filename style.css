@@ -1542,24 +1542,17 @@ body.gate-locked { overflow: hidden; }
 .cd-cal-btn:hover { background: #C8102E; color: #fff; transform: translateY(-2px); }
 
 /* ============================================================
-   AGENCY CREDITS FOOTER
+   AGENCY CREDITS BLOCK
    ============================================================ */
-.agency-footer {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  padding: 3.5rem 1rem 6.5rem;
-  background: #faf8f5;
-  border-top: 1px solid rgba(200, 16, 46, 0.15);
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
-.agency-content {
+.agency-credit-block {
+  margin-top: 3.5rem;
+  padding-top: 2.2rem;
+  border-top: 1px dashed rgba(200, 16, 46, 0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.85rem;
+  text-align: center;
 }
 .agency-crafted {
   font-family: var(--ff-sans);
@@ -1624,4 +1617,5 @@ body.gate-locked { overflow: hidden; }
   color: #128C7E;
   box-shadow: 0 6px 16px rgba(37, 211, 102, 0.2);
 }
+
 
