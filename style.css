@@ -1468,8 +1468,6 @@ body.gate-locked { overflow: hidden; }
   color: #1a1a1a;
   font-size: clamp(3rem, 11vw, 6rem);
   line-height: 1.2;
-  opacity: 0;
-  animation: gateIn 1.2s ease 0.2s forwards;
 }
 .gate-amp { color: #C8102E; }
 .gate-sub {
@@ -1479,8 +1477,6 @@ body.gate-locked { overflow: hidden; }
   letter-spacing: 0.4em;
   text-transform: uppercase;
   color: #555;
-  opacity: 0;
-  animation: gateIn 1s ease 0.8s forwards;
 }
 .gate-btn {
   margin-top: 2.5rem;
@@ -1496,12 +1492,10 @@ body.gate-locked { overflow: hidden; }
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(200, 16, 46, 0.3);
-  opacity: 0;
-  animation: gateIn 1s ease 1.2s forwards, gatePulse 2.4s ease-in-out 2.4s infinite;
+  animation: gatePulse 2.4s ease-in-out infinite;
   transition: background 0.3s ease, transform 0.3s ease;
 }
 .gate-btn:hover { background: #8B0015; transform: translateY(-2px); }
-@keyframes gateIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes gatePulse { 0%,100% { box-shadow: 0 12px 28px rgba(200,16,46,0.3); } 50% { box-shadow: 0 12px 40px rgba(200,16,46,0.5); } }
 
 /* ── Countdown: end message + save-the-date buttons ── */
