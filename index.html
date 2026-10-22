@@ -43,47 +43,78 @@
     html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
     body.gate-locked { overflow: hidden; }
     .gate {
-      position: fixed; inset: 0; z-index: 5000;
-      display: grid; place-items: center;
-      background: radial-gradient(ellipse 45% 40% at 50% 45%, #f1f1f1 0%, #ffffff 100%);
-      transition: opacity 0.9s ease, visibility 0.9s ease, transform 0.9s ease;
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse 65% 55% at 50% 45%, #ffffff 0%, #f3eee9 100%);
+      padding: 1.5rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease, transform 0.8s ease;
     }
     .gate.gate-hidden { opacity: 0; visibility: hidden; transform: scale(1.04); pointer-events: none; }
-    .gate-inner { text-align: center; padding: 0 1.5rem; }
+    .gate-inner {
+      text-align: center;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
     .gate-names {
       font-family: 'Pinyon Script', 'Brush Script MT', cursive, Georgia, serif;
       color: #1a1a1a;
-      font-size: clamp(3rem, 11vw, 6rem);
-      line-height: 1.2;
+      font-size: clamp(2.8rem, 9.5vw, 5.5rem);
+      line-height: 1.15;
+      margin: 0;
     }
-    .gate-amp { color: #C8102E; }
+    .gate-amp { color: #C8102E; margin: 0 0.15em; }
     .gate-sub {
-      margin-top: clamp(2.5rem, 8vw, 4.5rem);
+      margin-top: clamp(1rem, 3vh, 2.2rem);
       font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: clamp(0.9rem, 2.5vw, 1.15rem);
-      letter-spacing: 0.4em;
+      font-size: clamp(0.85rem, 2.4vw, 1.05rem);
+      letter-spacing: 0.35em;
       text-transform: uppercase;
       color: #555;
+      font-weight: 500;
     }
     .gate-btn {
-      margin-top: 2.5rem;
-      padding: 1.1rem 3.6rem;
-      border: 0;
+      margin-top: clamp(1.5rem, 4vh, 2.5rem);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 1.15rem 3.4rem;
+      border: 2px solid #8B0015;
       border-radius: 999px;
       background: #C8102E;
-      color: #fff;
+      color: #ffffff;
       font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      letter-spacing: 0.25em;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 12px 28px rgba(200, 16, 46, 0.3);
-      animation: gatePulse 2.4s ease-in-out infinite;
-      transition: background 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 8px 28px rgba(200, 16, 46, 0.45), 0 0 0 4px rgba(200, 16, 46, 0.18);
+      animation: gatePulse 2s ease-in-out infinite;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
     }
-    .gate-btn:hover { background: #8B0015; transform: translateY(-2px); }
-    @keyframes gatePulse { 0%,100% { box-shadow: 0 12px 28px rgba(200,16,46,0.3); } 50% { box-shadow: 0 12px 40px rgba(200,16,46,0.5); } }
+    .gate-btn svg { width: 18px; height: 18px; transition: transform 0.3s ease; }
+    .gate-btn:hover {
+      background: #8B0015;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(139, 0, 21, 0.6), 0 0 0 6px rgba(200, 16, 46, 0.25);
+    }
+    .gate-btn:hover svg { transform: translateX(4px); }
+    @keyframes gatePulse {
+      0%, 100% {
+        box-shadow: 0 8px 28px rgba(200, 16, 46, 0.45), 0 0 0 4px rgba(200, 16, 46, 0.18);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 12px 36px rgba(200, 16, 46, 0.65), 0 0 0 8px rgba(200, 16, 46, 0.28);
+        transform: scale(1.03);
+      }
+    }
   </style>
 </head>
 <body class="gate-locked">
@@ -93,7 +124,10 @@
     <div class="gate-inner">
       <p class="gate-names">Faith <span class="gate-amp">&amp;</span> Arome</p>
       <p class="gate-sub">You are invited</p>
-      <button id="open-invitation" class="gate-btn" type="button">Open Invitation</button>
+      <button id="open-invitation" class="gate-btn" type="button">
+        <span>Open Invitation</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 
