@@ -1542,80 +1542,83 @@ body.gate-locked { overflow: hidden; }
 .cd-cal-btn:hover { background: #C8102E; color: #fff; transform: translateY(-2px); }
 
 /* ============================================================
-   AGENCY CREDITS BLOCK
+   AGENCY CREDITS BLOCK (Compact & Professional)
    ============================================================ */
 .agency-credit-block {
-  margin-top: 3.5rem;
-  padding-top: 2.2rem;
-  border-top: 1px dashed rgba(200, 16, 46, 0.25);
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(200, 16, 46, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.45rem;
   text-align: center;
 }
 .agency-crafted {
   font-family: var(--ff-sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.25em;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #777;
+  color: #8c8c8c;
 }
 .agency-brand {
   font-family: var(--ff-sans);
   font-weight: 700;
-  font-size: clamp(1.05rem, 3vw, 1.3rem);
-  letter-spacing: 0.18em;
-  color: #111;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  color: #C8102E;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 .agency-brand:hover {
-  color: #C8102E;
+  opacity: 0.8;
 }
 .agency-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem 1rem;
-  margin-top: 0.5rem;
+  gap: 0.4rem 0.6rem;
+  margin-top: 0.2rem;
 }
 .agency-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.6rem 1.15rem;
+  gap: 0.38rem;
+  padding: 0.3rem 0.72rem;
   background: #ffffff;
-  border: 1px solid rgba(200, 16, 46, 0.2);
+  border: 1px solid rgba(200, 16, 46, 0.18);
   border-radius: 999px;
   font-family: var(--ff-sans);
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: #222;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: #444;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
 .agency-link svg {
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   color: #C8102E;
   flex-shrink: 0;
+}
+.agency-link.agency-whatsapp {
+  border-color: rgba(37, 211, 102, 0.35);
 }
 .agency-link.agency-whatsapp svg {
   color: #25D366;
 }
 .agency-link:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: #C8102E;
   color: #C8102E;
-  box-shadow: 0 6px 16px rgba(200, 16, 46, 0.15);
+  background: #fff5f6;
 }
 .agency-link.agency-whatsapp:hover {
   border-color: #25D366;
   color: #128C7E;
-  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.2);
+  background: #f0fdf4;
 }
 
 
