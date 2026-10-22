@@ -8,4 +8,23 @@
 !assets/*.mp4
 Timi_Dakolo_-_Obim_CeeNaija.com_.mp3
 package-lock.json
+node_modules/
+compress-images.js
+compress-audio.js
+
+# Exclude original/uncompressed media — only compressed versions are needed
 assets/storyexport.mov
+assets/storyexport.mp4
+assets/obim.mp3
+assets/behind-the-scenes.mp4
+
+# Exclude floral PNG assets that are large and not used in HTML
+assets/floral_corner.png
+assets/floral_divider.png
+assets/floral_header.png
+
+# Raw root-level media
+1e7b7cd4-664f-4e69-a50a-2378793fabcd.MP4
+StoryExport.MOV
+StoryExport__compress.mov
+Obim_compressed.mp3

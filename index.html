@@ -15,18 +15,25 @@
   <meta property="og:image:alt" content="Faith and Arome — Wedding Couple Photo" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://faith-and-arome.vercel.app/54fb4825-f77a-494e-ac9d-acc44585de10.jpeg" />
-  <!-- DNS prefetch for external origins -->
+  <!-- DNS prefetch & preconnect for external origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
+  <!-- Preload main stylesheet to eliminate render-blocking delay -->
+  <link rel="preload" href="style.css" as="style" />
+
+  <!-- Preload LCP hero image so browser fetches it immediately -->
+  <link rel="preload" as="image" href="54fb4825-f77a-494e-ac9d-acc44585de10.jpeg"
+        fetchpriority="high" />
+
   <!-- Non-blocking Google Fonts (prevents render-blocking) -->
-  <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Pinyon+Script&display=optional"
+  <link rel="preload" as="style" fetchpriority="low"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Pinyon+Script&display=swap"
         onload="this.onload=null;this.rel='stylesheet'" />
   <noscript>
     <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Pinyon+Script&display=optional" />
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500&family=Pinyon+Script&display=swap" />
   </noscript>
 
   <link rel="icon" type="image/jpeg" href="54fb4825-f77a-494e-ac9d-acc44585de10.jpeg" />
@@ -103,6 +110,7 @@
         tabindex="-1"
         width="1920"
         height="1080"
+        poster="54fb4825-f77a-494e-ac9d-acc44585de10.jpeg"
       >
         <!-- src injected by JS after gate opens to avoid blocking LCP -->
       </video>
@@ -289,7 +297,10 @@
         <h2 class="sch-title">Behind the Scenes</h2>
       </div>
       <div class="bts-frame fade-up delay-1">
-        <video id="bts-video" class="bts-video" src="assets/behind-the-scenes-compressed.mp4" controls playsinline preload="metadata"></video>
+        <video id="bts-video" class="bts-video" src="assets/behind-the-scenes-compressed.mp4"
+               controls playsinline preload="none"
+               poster="assets/invitation.jpeg"
+               loading="lazy"></video>
       </div>
     </div>
   </section>
@@ -333,7 +344,9 @@
 
       <div class="gallery-masonry fade-up delay-1">
         <div class="gallery-item gallery-item-tall" data-index="0">
-          <img src="assets/photo1.jpeg" alt="Faith and Arome — romantic portrait session" loading="lazy" decoding="async" />
+          <img src="assets/photo1.jpeg" alt="Faith and Arome — romantic portrait session"
+               loading="lazy" decoding="async" width="800" height="1067"
+               fetchpriority="low" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
               <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -341,7 +354,9 @@
           </div>
         </div>
         <div class="gallery-item" data-index="1">
-          <img src="assets/photo2.jpeg" alt="Faith and Arome — tender moment" loading="lazy" decoding="async" />
+          <img src="assets/photo2.jpeg" alt="Faith and Arome — tender moment"
+               loading="lazy" decoding="async" width="800" height="600"
+               fetchpriority="low" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
               <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -349,7 +364,9 @@
           </div>
         </div>
         <div class="gallery-item" data-index="2">
-          <img src="assets/photo3.jpeg" alt="Faith and Arome — sitting portrait" loading="lazy" decoding="async" />
+          <img src="assets/photo3.jpeg" alt="Faith and Arome — sitting portrait"
+               loading="lazy" decoding="async" width="800" height="600"
+               fetchpriority="low" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
               <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -357,7 +374,9 @@
           </div>
         </div>
         <div class="gallery-item gallery-item-tall" data-index="3">
-          <img src="assets/photo4.jpeg" alt="Faith and Arome — warm portrait" loading="lazy" decoding="async" />
+          <img src="assets/photo4.jpeg" alt="Faith and Arome — warm portrait"
+               loading="lazy" decoding="async" width="800" height="1067"
+               fetchpriority="low" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
               <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -365,7 +384,9 @@
           </div>
         </div>
         <div class="gallery-item gallery-item-wide" data-index="4">
-          <img src="assets/photo5.jpeg" alt="Faith and Arome — in traditional attire" loading="lazy" decoding="async" />
+          <img src="assets/photo5.jpeg" alt="Faith and Arome — in traditional attire"
+               loading="lazy" decoding="async" width="1200" height="800"
+               fetchpriority="low" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
               <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
