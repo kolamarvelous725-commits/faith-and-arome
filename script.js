@@ -236,6 +236,7 @@
 
   audio.volume = 0.6;
   let userPaused = false;
+  let readyToPlay = false;
   const EVENTS = ['click', 'touchstart', 'scroll', 'keydown'];
 
   function setUI(playing) {
@@ -245,11 +246,27 @@
   }
 
   function tryPlay() {
+    if (userPaused) return Promise.resolve();
     return audio.play().then(() => setUI(true)).catch(() => setUI(false));
   }
 
-  // Try to start as soon as the visitor lands
-  tryPlay();
+  // Wait for enough audio to buffer before playing
+  function onReady() {
+    readyToPlay = true;
+    tryPlay();
+  }
+
+  if (audio.readyState >= 3) {
+    // Already buffered enough
+    onReady();
+  } else {
+    audio.addEventListener('canplaythrough', onReady, { once: true });
+    // Fallback: try anyway after 3s if canplaythrough never fires
+    setTimeout(() => { if (!readyToPlay) tryPlay(); }, 3000);
+  }
+
+  // Force the browser to start loading the audio immediately
+  audio.load();
 
   // Welcome gate: clicking "Open Invitation" reveals the site
   // and starts the music (the click counts as user interaction).

@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+*.log
+compress-audio.js
+compress-images.js
