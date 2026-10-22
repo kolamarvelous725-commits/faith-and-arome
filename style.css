@@ -46,7 +46,6 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
-  decoding: async; /* async image decode — doesn't block main thread */
 }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
