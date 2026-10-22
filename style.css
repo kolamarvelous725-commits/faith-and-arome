@@ -1545,10 +1545,15 @@ body.gate-locked { overflow: hidden; }
    AGENCY CREDITS FOOTER
    ============================================================ */
 .agency-footer {
-  padding: 3.5rem 0 4.5rem;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  padding: 3.5rem 1rem 6.5rem;
   background: #faf8f5;
-  border-top: 1px solid rgba(200, 16, 46, 0.12);
+  border-top: 1px solid rgba(200, 16, 46, 0.15);
   text-align: center;
+  position: relative;
+  z-index: 10;
 }
 .agency-content {
   display: flex;
