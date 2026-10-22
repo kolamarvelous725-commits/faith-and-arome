@@ -210,21 +210,8 @@
     el.classList.add('visible');
   });
 
-  const video = document.getElementById('hero-video');
-  if (!video) return;
-
-  // Guarantee muted (some browsers reset the attribute)
-  video.muted  = true;
-  video.volume = 0;
-
-  // Attempt autoplay; if browser policy blocks it, retry muted
-  const playPromise = video.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(() => {
-      video.muted = true;
-      video.play().catch(() => {/* silently ignore if still blocked */});
-    });
-  }
+  // Video src is injected lazily by the gate click handler below
+  // to avoid blocking LCP with a 2.9 MB asset on page load.
 
 })();
 
@@ -265,8 +252,16 @@
     setTimeout(() => { if (!readyToPlay) tryPlay(); }, 3000);
   }
 
-  // Force the browser to start loading the audio immediately
-  audio.load();
+  // Set audio src before loading — avoids preloading 941KB on page load
+  const AUDIO_SRC = 'assets/obim-compressed.mp3';
+
+  // Force the browser to start loading the audio only after src is set
+  function loadAudio() {
+    if (!audio.src || !audio.src.includes('obim')) {
+      audio.src = AUDIO_SRC;
+      audio.load();
+    }
+  }
 
   // Welcome gate: clicking "Open Invitation" reveals the site
   // and starts the music (the click counts as user interaction).
@@ -277,9 +272,26 @@
     window.scrollTo(0, 0);
     openBtn.addEventListener('click', () => {
       userPaused = false;
-      tryPlay();
+
+      // ── Lazy-load hero video (saves ~2.9MB on initial page load) ──
       const v = document.getElementById('hero-video');
-      if (v) { v.currentTime = 0; v.play().catch(() => {}); }
+      if (v && !v.src) {
+        const source = document.createElement('source');
+        source.src  = 'assets/storyexport-compressed.mp4';
+        source.type = 'video/mp4';
+        v.appendChild(source);
+        v.muted = true;
+        v.load();
+        v.play().catch(() => {});
+      } else if (v) {
+        v.currentTime = 0;
+        v.play().catch(() => {});
+      }
+
+      // ── Lazy-load audio (saves ~941KB on initial page load) ──
+      loadAudio();
+      tryPlay();
+
       gate.classList.add('gate-hidden');
       document.body.classList.remove('gate-locked');
       setTimeout(() => gate.remove(), 1000);

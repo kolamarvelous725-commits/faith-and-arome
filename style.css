@@ -40,10 +40,31 @@ body {
   color: var(--text-dark);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeSpeed;
 }
-img { display: block; max-width: 100%; height: auto; }
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  decoding: async; /* async image decode — doesn't block main thread */
+}
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
+
+/* ── PERFORMANCE: Skip rendering off-screen sections ────── */
+/* content-visibility:auto lets the browser skip paint/layout
+   for sections not yet in the viewport — huge LCP & FID win  */
+#our-story,
+#countdown-section,
+#invitation-details,
+#behind-the-scenes,
+#schedule,
+#gallery,
+#dress-code,
+#ending {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px; /* rough estimated height */
+}
 
 /* ── SCROLLBAR ──────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
@@ -139,112 +160,8 @@ ul { list-style: none; }
 }
 
 /* ============================================================
-   NAVIGATION
+   NAVIGATION — no nav element in this single-page layout
 ============================================================ */
-#main-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  /* Default: transparent dark — for the hero photo background */
-  background: rgba(20, 6, 38, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-}
-/* After scrolling past the hero: switch to ivory frosted glass */
-#main-nav.scrolled {
-  background: rgba(255, 252, 248, 0.94);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 30px rgba(99, 53, 140, 0.08);
-}
-.nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(1.5rem, 5vw, 4rem);
-  height: 68px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.nav-monogram {
-  font-family: var(--ff-display);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-  letter-spacing: 0.05em;
-  transition: color 0.5s ease;
-}
-#main-nav.scrolled .nav-monogram { color: var(--plum); }
-.nav-amp { color: var(--champagne); }
-.nav-links {
-  display: flex;
-  gap: 2.5rem;
-  align-items: center;
-}
-.nav-links a {
-  font-family: var(--ff-sans);
-  font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
-  position: relative;
-  transition: color var(--transition);
-}
-#main-nav.scrolled .nav-links a { color: var(--text-mid); }
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -3px; left: 0; right: 0;
-  height: 1px;
-  background: var(--champagne);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform var(--transition);
-}
-.nav-links a:hover { color: var(--purple); }
-.nav-links a:hover::after { transform: scaleX(1); }
-
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-.nav-hamburger span {
-  display: block;
-  width: 24px;
-  height: 1.5px;
-  background: white;
-  transition: var(--transition);
-}
-#main-nav.scrolled .nav-hamburger span { background: var(--plum); }
-.nav-mobile-menu {
-  display: none;
-  flex-direction: column;
-  background: var(--ivory);
-  border-top: 1px solid var(--border);
-  padding: 1rem 0;
-}
-.nav-mobile-menu.open { display: flex; }
-.nav-mobile-menu a {
-  padding: 0.85rem clamp(1.5rem, 5vw, 4rem);
-  font-family: var(--ff-sans);
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-mid);
-  border-bottom: 1px solid var(--border);
-  transition: color var(--transition), background var(--transition);
-}
-.nav-mobile-menu a:last-child { border-bottom: none; }
-.nav-mobile-menu a:hover { color: var(--purple); background: rgba(200,16,46,0.08); }
 
 /* ============================================================
    HERO SECTION — CINEMATIC FULLSCREEN SLIDESHOW
@@ -285,6 +202,8 @@ ul { list-style: none; }
   display: block;
   /* Subtle scale-up matches the cinematic feel of the old Ken-Burns slides */
   transform: scale(1.02);
+  /* GPU-composite the video layer to avoid main-thread repaints */
+  will-change: transform;
 }
 
 /* Suppress any browser-injected controls overlay */
@@ -642,9 +561,10 @@ ul { list-style: none; }
 
 
 /* ============================================================
-   WEDDING DETAILS SECTION
+   WEDDING DETAILS SECTION — not used in current HTML
+   (kept as reference; safely removable)
 ============================================================ */
-.details-section {
+.details-section-UNUSED {
   padding: clamp(4rem, 8vw, 7rem) 0;
   background: linear-gradient(180deg, #fff5f5 0%, var(--ivory) 100%);
   position: relative;
@@ -959,9 +879,9 @@ ul { list-style: none; }
 }
 
 /* ============================================================
-   CONTACT SECTION
+   CONTACT / FOOTER — not used in current HTML
 ============================================================ */
-.contact-section {
+.contact-section-UNUSED {
   padding: clamp(4rem, 8vw, 7rem) 0;
   background: var(--white);
 }
