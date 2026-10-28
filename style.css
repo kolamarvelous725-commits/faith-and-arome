@@ -853,14 +853,11 @@ ul { list-style: none; }
   inset: 0;
   z-index: 5000;
   background: rgba(6, 3, 8, 0.98);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: block;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   user-select: none;
-  touch-action: pan-y;
+  overflow: hidden;
   /* Fade-in animation */
   opacity: 0;
   transition: opacity 0.32s ease;
@@ -871,13 +868,16 @@ ul { list-style: none; }
 .lightbox[hidden] { display: none; }
 .lightbox-topbar {
   position: absolute;
-  top: 1.25rem;
-  left: 1.5rem;
-  right: 1.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
+  z-index: 20;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
 }
 .lightbox-counter {
   font-family: var(--ff-sans);
@@ -903,16 +903,19 @@ ul { list-style: none; }
 .lightbox-close svg { width: 18px; }
 .lightbox-close:hover { background: rgba(200, 16, 46, 0.75); transform: scale(1.08); }
 
-/* Main image area takes up the space between topbar and filmstrip */
+/* ── Image wrap: absolute layer, pointer-events:none so arrows below are always clickable ── */
 .lightbox-img-wrap {
-  flex: 1;
+  position: absolute;
+  top: 64px;        /* below topbar */
+  bottom: 84px;     /* above filmstrip */
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  padding: 4.5rem 5.5rem 0.75rem;
+  padding: 0.75rem 4.5rem; /* horizontal gap for arrows */
   transition: opacity 0.18s ease, transform 0.18s ease;
-  overflow: hidden;
+  pointer-events: none; /* let clicks pass through to arrows */
 }
 .lightbox-img-wrap img {
   max-width: 100%;
@@ -921,49 +924,52 @@ ul { list-style: none; }
   height: auto;
   object-fit: contain;
   border-radius: 6px;
-  box-shadow: 0 30px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
+  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
   display: block;
+  pointer-events: auto;
 }
 
+/* ── Nav arrows: always above image wrap, centred in image area ── */
 .lightbox-nav {
   position: absolute;
-  top: 50%;
-  /* Shift up to clear the filmstrip area (~110px) */
-  margin-top: -55px;
+  top: calc(64px + (100vh - 64px - 84px) / 2);
   transform: translateY(-50%);
   width: 52px; height: 52px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 50%;
   color: white;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  z-index: 10;
-  transition: background 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+  z-index: 15;
+  transition: background 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
 }
 .lightbox-nav svg { width: 22px; }
 .lightbox-nav:hover {
-  background: rgba(200, 16, 46, 0.75);
+  background: rgba(200, 16, 46, 0.8);
   border-color: rgba(200, 16, 46, 0.9);
-  transform: translateY(-50%) scale(1.08);
+  transform: translateY(-50%) scale(1.1);
 }
-.lightbox-nav:hover { transform: translateY(-50%) translateY(-55px) scale(1.08); }
-.lightbox-prev { left: 1.25rem; }
-.lightbox-next { right: 1.25rem; }
+.lightbox-prev { left: 1rem; }
+.lightbox-next { right: 1rem; }
 
-/* ── THUMBNAIL FILMSTRIP ── */
+/* ── Filmstrip: pinned to bottom of lightbox ── */
 .lightbox-filmstrip {
-  width: 100%;
-  padding: 0.6rem 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 84px;
+  padding: 0.5rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200,16,46,0.6) rgba(255,255,255,0.05);
+  background: rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 20;
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(200,16,46,0.6) rgba(255,255,255,0.05);
-  background: rgba(0, 0, 0, 0.45);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .lightbox-filmstrip::-webkit-scrollbar {
   height: 3px;
@@ -1006,10 +1012,11 @@ ul { list-style: none; }
 }
 
 @media (max-width: 600px) {
-  .lightbox-prev { left: 0.5rem; width: 40px; height: 40px; }
-  .lightbox-next { right: 0.5rem; width: 40px; height: 40px; }
-  .lightbox-img-wrap { padding: 4rem 3rem 0.5rem; }
-  .lb-thumb { width: 50px; height: 50px; }
+  .lightbox-prev { left: 0.4rem; width: 40px; height: 40px; }
+  .lightbox-next { right: 0.4rem; width: 40px; height: 40px; }
+  .lightbox-img-wrap { padding: 0.5rem 3rem; bottom: 72px; }
+  .lb-thumb { width: 46px; height: 46px; }
+  .lightbox-filmstrip { height: 72px; }
 }
 
 /* ============================================================

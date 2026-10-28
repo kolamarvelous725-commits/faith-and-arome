@@ -224,6 +224,8 @@
   function openLightbox(index) {
     lightbox.hidden = false;
     document.body.style.overflow = 'hidden';
+    // Force the lightbox to always anchor to the viewport top
+    lightbox.scrollTop = 0;
     // Small delay so hidden→visible transition works
     requestAnimationFrame(() => {
       lightbox.classList.add('lb-open');
@@ -260,9 +262,9 @@
     });
   });
 
-  if (lbClose) lbClose.addEventListener('click', closeLightbox);
-  if (lbPrev)  lbPrev.addEventListener('click',  showPrev);
-  if (lbNext)  lbNext.addEventListener('click',  showNext);
+  if (lbClose) lbClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+  if (lbPrev)  lbPrev.addEventListener('click',  (e) => { e.stopPropagation(); showPrev(); });
+  if (lbNext)  lbNext.addEventListener('click',  (e) => { e.stopPropagation(); showNext(); });
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
