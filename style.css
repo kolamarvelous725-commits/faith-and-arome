@@ -1437,6 +1437,22 @@ ul { list-style: none; }
   box-shadow: 0 14px 30px rgba(200, 16, 46, 0.4);
 }
 
+/* ── Embedded Map ── */
+.inv-map-wrap {
+  margin-top: 1.75rem;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(200, 16, 46, 0.15);
+  border: 1px solid rgba(200, 16, 46, 0.15);
+}
+.inv-map {
+  display: block;
+  width: 100%;
+  height: 240px;
+  border: 0;
+}
+
 /* ============================================================
    SCHEDULE OF EVENTS
 ============================================================ */
