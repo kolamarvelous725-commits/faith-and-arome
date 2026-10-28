@@ -852,40 +852,37 @@ ul { list-style: none; }
   position: fixed;
   inset: 0;
   z-index: 5000;
-  background: rgba(6, 3, 8, 0.98);
-  /* Use flex-column so children stack: topbar / image / filmstrip */
+  background: rgba(5, 2, 8, 0.97);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   -webkit-user-select: none;
   user-select: none;
-  touch-action: pan-y;
   overflow: hidden;
-  /* Fade-in */
   opacity: 0;
-  transition: opacity 0.32s ease;
-  /* iOS safe-area */
+  transition: opacity 0.3s ease;
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.lightbox.lb-open  { opacity: 1; }
+.lightbox.lb-open { opacity: 1; }
 .lightbox[hidden]  { display: none; }
 
-/* ── Top bar ── */
+/* ── Topbar ── */
 .lightbox-topbar {
   flex-shrink: 0;
-  height: 60px;
+  height: 58px;
   padding: 0 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 20;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+  position: relative;
+  z-index: 30;
 }
 .lightbox-counter {
   font-family: var(--ff-sans);
   font-size: 0.82rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.15em;
   color: rgba(255,255,255,0.9);
   padding: 0.3rem 0.85rem;
   border-radius: 999px;
@@ -895,32 +892,35 @@ ul { list-style: none; }
   white-space: nowrap;
 }
 .lightbox-close {
-  flex-shrink: 0;
-  width: 42px; height: 42px;
+  width: 40px; height: 40px;
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.22);
   border-radius: 50%;
   color: #fff;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.25s ease, transform 0.2s ease;
-  z-index: 21;
-}
-.lightbox-close svg { width: 17px; }
-.lightbox-close:hover { background: rgba(200,16,46,0.8); transform: scale(1.1); }
-
-/* ── Image area: takes all remaining vertical space ── */
-.lightbox-img-wrap {
-  flex: 1 1 0;
-  min-height: 0;           /* critical — lets flex child shrink below content size */
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Side padding = arrow width + small gap so image never hides behind arrows */
-  padding: 0.5rem 72px;
+  transition: background 0.25s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 31;
+  flex-shrink: 0;
+}
+.lightbox-close svg { width: 16px; }
+.lightbox-close:hover { background: rgba(200,16,46,0.85); transform: scale(1.1); }
+
+/* ── Image wrap: fills all remaining space ── */
+.lightbox-img-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Horizontal padding keeps image clear of arrow buttons */
+  padding: 0.75rem 4rem;
   transition: opacity 0.18s ease, transform 0.18s ease;
-  pointer-events: none;    /* pass arrow clicks through */
+  position: relative;
+  z-index: 5;
 }
 .lightbox-img-wrap img {
   max-width: 100%;
@@ -928,67 +928,60 @@ ul { list-style: none; }
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 6px;
-  box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+  border-radius: 8px;
+  box-shadow: 0 16px 64px rgba(0,0,0,0.75);
   display: block;
-  pointer-events: auto;
 }
 
-/* ── Nav arrows: stretch vertically across image area ── */
+/* ── Nav arrows ── */
 .lightbox-nav {
   position: absolute;
-  top: 60px;              /* below topbar */
-  bottom: 76px;           /* above filmstrip */
-  width: 56px;
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 15;
-  transition: color 0.2s ease;
-}
-/* Inner circle badge on the arrow icon */
-.lightbox-nav svg {
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  padding: 10px;
-  flex-shrink: 0;
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.22s ease, transform 0.18s ease;
 }
-.lightbox-nav:hover svg {
+.lightbox-nav svg { width: 20px; height: 20px; flex-shrink: 0; }
+.lightbox-nav:hover {
   background: rgba(200,16,46,0.85);
   border-color: rgba(200,16,46,0.9);
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
 }
-.lightbox-prev { left: 0; }
-.lightbox-next { right: 0; }
+.lightbox-prev { left: 0.75rem; }
+.lightbox-next { right: 0.75rem; }
 
-/* ── Filmstrip: fixed height at bottom ── */
+/* ── Filmstrip ── */
 .lightbox-filmstrip {
   flex-shrink: 0;
-  height: 76px;
+  height: 74px;
   padding: 0.4rem 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.38rem;
   overflow-x: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(200,16,46,0.55) rgba(255,255,255,0.04);
+  scrollbar-color: rgba(200,16,46,0.5) rgba(255,255,255,0.04);
   background: rgba(0,0,0,0.55);
   border-top: 1px solid rgba(255,255,255,0.08);
-  z-index: 20;
+  position: relative;
+  z-index: 30;
 }
 .lightbox-filmstrip::-webkit-scrollbar { height: 3px; }
-.lightbox-filmstrip::-webkit-scrollbar-thumb {
-  background: rgba(200,16,46,0.55);
-  border-radius: 2px;
-}
+.lightbox-filmstrip::-webkit-scrollbar-thumb { background: rgba(200,16,46,0.55); border-radius: 2px; }
+
 .lb-thumb {
   flex-shrink: 0;
-  width: 52px; height: 52px;
+  width: 50px; height: 50px;
   border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
@@ -1003,7 +996,7 @@ ul { list-style: none; }
   opacity: 1;
   border-color: var(--purple);
   transform: scale(1.07);
-  box-shadow: 0 0 0 2px rgba(200,16,46,0.3);
+  box-shadow: 0 0 0 2px rgba(200,16,46,0.35);
 }
 .lb-thumb img {
   width: 100%; height: 100%;
@@ -1014,27 +1007,30 @@ ul { list-style: none; }
   box-shadow: none;
 }
 
-/* ── Mobile: tighten everything for small screens ── */
+/* ── Mobile (max 480px) ── */
 @media (max-width: 480px) {
-  .lightbox-topbar  { height: 52px; padding: 0 1rem; }
-  .lightbox-counter { font-size: 0.75rem; padding: 0.25rem 0.65rem; }
+  .lightbox-topbar  { height: 50px; padding: 0 0.85rem; }
+  .lightbox-counter { font-size: 0.72rem; padding: 0.22rem 0.6rem; }
   .lightbox-close   { width: 36px; height: 36px; }
-  .lightbox-close svg { width: 15px; }
-  /* Side padding = nav width (44px) + 4px gap */
-  .lightbox-img-wrap { padding: 0.4rem 48px; }
-  .lightbox-nav  { width: 44px; top: 52px; bottom: 68px; }
-  .lightbox-nav svg { width: 36px; height: 36px; padding: 8px; }
-  .lightbox-filmstrip { height: 68px; padding: 0.35rem 0.6rem; gap: 0.3rem; }
-  .lb-thumb { width: 44px; height: 44px; }
+  .lightbox-close svg { width: 14px; }
+  .lightbox-img-wrap { padding: 0.5rem 3.5rem; }
+  .lightbox-nav  { width: 38px; height: 38px; }
+  .lightbox-nav svg { width: 16px; height: 16px; }
+  .lightbox-prev { left: 0.4rem; }
+  .lightbox-next { right: 0.4rem; }
+  .lightbox-filmstrip { height: 64px; gap: 0.3rem; padding: 0.3rem 0.6rem; }
+  .lb-thumb { width: 42px; height: 42px; }
 }
 
-/* ── Tablet: slightly larger arrows ── */
+/* ── Tablet / Desktop (min 768px) ── */
 @media (min-width: 768px) {
-  .lightbox-nav svg { width: 48px; height: 48px; padding: 12px; }
-  .lightbox-nav  { width: 64px; }
-  .lightbox-img-wrap { padding: 0.75rem 80px; }
-  .lb-thumb { width: 58px; height: 58px; }
-  .lightbox-filmstrip { height: 82px; }
+  .lightbox-nav { width: 54px; height: 54px; }
+  .lightbox-nav svg { width: 22px; height: 22px; }
+  .lightbox-prev { left: 1.25rem; }
+  .lightbox-next { right: 1.25rem; }
+  .lightbox-img-wrap { padding: 1rem 5rem; }
+  .lb-thumb { width: 56px; height: 56px; }
+  .lightbox-filmstrip { height: 80px; }
 }
 
 /* ============================================================

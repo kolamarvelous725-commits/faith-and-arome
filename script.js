@@ -262,9 +262,12 @@
     });
   });
 
-  if (lbClose) lbClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
-  if (lbPrev)  lbPrev.addEventListener('click',  (e) => { e.stopPropagation(); showPrev(); });
-  if (lbNext)  lbNext.addEventListener('click',  (e) => { e.stopPropagation(); showNext(); });
+  if (lbClose)    lbClose.addEventListener('click',    (e) => { e.stopPropagation(); closeLightbox(); });
+  if (lbPrev)     lbPrev.addEventListener('click',     (e) => { e.stopPropagation(); showPrev(); });
+  if (lbNext)     lbNext.addEventListener('click',     (e) => { e.stopPropagation(); showNext(); });
+  // Stop clicks inside the image or filmstrip from bubbling to the backdrop
+  if (lbWrap)     lbWrap.addEventListener('click',     (e) => { e.stopPropagation(); });
+  if (lbFilmstrip) lbFilmstrip.addEventListener('click', (e) => { e.stopPropagation(); });
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
@@ -274,7 +277,7 @@
     if (e.key === 'ArrowRight') showNext();
   });
 
-  // Click the dark backdrop to close (but not the image or controls)
+  // Click the bare dark backdrop to close
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
