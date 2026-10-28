@@ -123,15 +123,15 @@
 // ── GALLERY LIGHTBOX SLIDER (All 20 Photos) ───────────────
 (function initLightbox() {
   const ALL_PHOTOS = [
-    { src: 'assets/photo1.jpeg', alt: 'Faith and Arome — romantic portrait' },
-    { src: 'assets/photo2.jpeg', alt: 'Faith and Arome — tender moment' },
-    { src: 'assets/photo3.jpeg', alt: 'Faith and Arome — portrait' },
-    { src: 'assets/photo4.jpeg', alt: 'Faith and Arome — warm portrait' },
-    { src: 'assets/photo5.jpeg', alt: 'Faith and Arome — in traditional attire' },
-    { src: 'assets/photo6.jpeg', alt: 'Faith and Arome — celebration' },
-    { src: 'assets/photo7.jpeg', alt: 'Faith and Arome — together' },
-    { src: 'assets/photo8.jpeg', alt: 'Faith and Arome — joyful moment' },
-    { src: 'assets/photo9.jpeg', alt: 'Faith and Arome — romance' },
+    { src: 'assets/photo1.jpeg',  alt: 'Faith and Arome — romantic portrait' },
+    { src: 'assets/photo2.jpeg',  alt: 'Faith and Arome — tender moment' },
+    { src: 'assets/photo3.jpeg',  alt: 'Faith and Arome — portrait' },
+    { src: 'assets/photo4.jpeg',  alt: 'Faith and Arome — warm portrait' },
+    { src: 'assets/photo5.jpeg',  alt: 'Faith and Arome — in traditional attire' },
+    { src: 'assets/photo6.jpeg',  alt: 'Faith and Arome — celebration' },
+    { src: 'assets/photo7.jpeg',  alt: 'Faith and Arome — together' },
+    { src: 'assets/photo8.jpeg',  alt: 'Faith and Arome — joyful moment' },
+    { src: 'assets/photo9.jpeg',  alt: 'Faith and Arome — romance' },
     { src: 'assets/photo10.jpeg', alt: 'Faith and Arome — elegance' },
     { src: 'assets/photo11.jpeg', alt: 'Faith and Arome — loving smile' },
     { src: 'assets/photo12.jpeg', alt: 'Faith and Arome — cherished memory' },
@@ -153,10 +153,42 @@
   const lbClose      = document.getElementById('lightbox-close');
   const lbPrev       = document.getElementById('lightbox-prev');
   const lbNext       = document.getElementById('lightbox-next');
+  const lbFilmstrip  = document.getElementById('lightbox-filmstrip');
 
   if (!lightbox || !galleryItems.length) return;
 
   let currentIndex = 0;
+
+  // Build thumbnail filmstrip
+  if (lbFilmstrip) {
+    ALL_PHOTOS.forEach((photo, idx) => {
+      const thumb = document.createElement('button');
+      thumb.className = 'lb-thumb';
+      thumb.setAttribute('aria-label', `Go to photo ${idx + 1}`);
+      thumb.setAttribute('type', 'button');
+      const img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      thumb.appendChild(img);
+      thumb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        updatePhoto(idx, idx > currentIndex ? 1 : -1);
+      });
+      lbFilmstrip.appendChild(thumb);
+    });
+  }
+
+  function updateActiveThumb(index) {
+    if (!lbFilmstrip) return;
+    const thumbs = lbFilmstrip.querySelectorAll('.lb-thumb');
+    thumbs.forEach((t, i) => t.classList.toggle('lb-thumb-active', i === index));
+    // Scroll active thumb into view
+    if (thumbs[index]) {
+      thumbs[index].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    }
+  }
 
   function updatePhoto(index, direction = 0) {
     currentIndex = ((index % ALL_PHOTOS.length) + ALL_PHOTOS.length) % ALL_PHOTOS.length;
@@ -164,7 +196,9 @@
 
     if (lbWrap) {
       lbWrap.style.opacity = '0';
-      lbWrap.style.transform = direction !== 0 ? `translateX(${direction * 20}px)` : 'scale(0.96)';
+      lbWrap.style.transform = direction !== 0
+        ? `translateX(${direction * 30}px) scale(0.97)`
+        : 'scale(0.95)';
     }
 
     setTimeout(() => {
@@ -175,9 +209,10 @@
       }
       if (lbWrap) {
         lbWrap.style.opacity = '1';
-        lbWrap.style.transform = 'translate(0) scale(1)';
+        lbWrap.style.transform = 'translateX(0) scale(1)';
       }
-    }, 100);
+      updateActiveThumb(currentIndex);
+    }, 120);
 
     // Preload adjacent images
     const nextIdx = (currentIndex + 1) % ALL_PHOTOS.length;
@@ -189,51 +224,60 @@
   function openLightbox(index) {
     lightbox.hidden = false;
     document.body.style.overflow = 'hidden';
+    // Small delay so hidden→visible transition works
+    requestAnimationFrame(() => {
+      lightbox.classList.add('lb-open');
+    });
     updatePhoto(index, 0);
     if (lbClose) lbClose.focus();
   }
 
   function closeLightbox() {
-    lightbox.hidden = true;
-    document.body.style.overflow = '';
+    lightbox.classList.remove('lb-open');
+    setTimeout(() => {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+    }, 320);
     const origin = galleryItems[Math.min(currentIndex, galleryItems.length - 1)];
     if (origin) origin.focus();
   }
 
   function showPrev() { updatePhoto(currentIndex - 1, -1); }
-  function showNext() { updatePhoto(currentIndex + 1, 1); }
+  function showNext() { updatePhoto(currentIndex + 1,  1); }
 
-  // Open on click of any of the 4 displayed photos
-  galleryItems.forEach((item, i) => {
-    item.addEventListener('click', () => openLightbox(i));
+  // Open lightbox from any of the 4 grid photos using data-index attribute
+  galleryItems.forEach((item) => {
+    const dataIdx = parseInt(item.getAttribute('data-index'), 10);
+    const openIdx = isNaN(dataIdx) ? 0 : dataIdx;
+    item.addEventListener('click', () => openLightbox(openIdx));
     item.setAttribute('tabindex', '0');
     item.setAttribute('role', 'button');
     item.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openLightbox(i);
+        openLightbox(openIdx);
       }
     });
   });
 
   if (lbClose) lbClose.addEventListener('click', closeLightbox);
-  if (lbPrev) lbPrev.addEventListener('click', showPrev);
-  if (lbNext) lbNext.addEventListener('click', showNext);
+  if (lbPrev)  lbPrev.addEventListener('click',  showPrev);
+  if (lbNext)  lbNext.addEventListener('click',  showNext);
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (lightbox.hidden) return;
-    if (e.key === 'Escape')      closeLightbox();
-    if (e.key === 'ArrowLeft')   showPrev();
-    if (e.key === 'ArrowRight')  showNext();
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  showPrev();
+    if (e.key === 'ArrowRight') showNext();
   });
 
-  // Click backdrop to close
+  // Click the dark backdrop to close (but not the image or controls)
   lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox || e.target === lbWrap) closeLightbox();
+    if (e.target === lightbox) closeLightbox();
   });
 
-  // Touch swipe gestures for mobile slider
+  // Touch swipe gestures for mobile
   let touchStartX = 0;
   let touchStartY = 0;
   lightbox.addEventListener('touchstart', (e) => {
