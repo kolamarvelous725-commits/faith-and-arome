@@ -451,15 +451,17 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div class="lightbox-img-wrap" id="lightbox-wrap">
-      <img id="lightbox-img" src="" alt="" />
+    <div class="lightbox-stage">
+      <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="lightbox-img-wrap" id="lightbox-wrap">
+        <img id="lightbox-img" src="" alt="" />
+      </div>
+      <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
-    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
     <!-- Thumbnail filmstrip -->
     <div class="lightbox-filmstrip" id="lightbox-filmstrip" aria-label="Photo thumbnails"></div>
   </div>

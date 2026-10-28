@@ -907,6 +907,15 @@ ul { list-style: none; }
 .lightbox-close svg { width: 16px; }
 .lightbox-close:hover { background: rgba(200,16,46,0.85); transform: scale(1.1); }
 
+/* ── Stage: wraps image + nav arrows so position:absolute works ── */
+.lightbox-stage {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
 /* ── Image wrap: fills all remaining space ── */
 .lightbox-img-wrap {
   flex: 1;
