@@ -120,11 +120,36 @@
   });
 })();
 
-// ── GALLERY LIGHTBOX ──────────────────────────────────────
+// ── GALLERY LIGHTBOX SLIDER (All 20 Photos) ───────────────
 (function initLightbox() {
+  const ALL_PHOTOS = [
+    { src: 'assets/photo1.jpeg', alt: 'Faith and Arome — romantic portrait' },
+    { src: 'assets/photo2.jpeg', alt: 'Faith and Arome — tender moment' },
+    { src: 'assets/photo3.jpeg', alt: 'Faith and Arome — portrait' },
+    { src: 'assets/photo4.jpeg', alt: 'Faith and Arome — warm portrait' },
+    { src: 'assets/photo5.jpeg', alt: 'Faith and Arome — in traditional attire' },
+    { src: 'assets/photo6.jpeg', alt: 'Faith and Arome — celebration' },
+    { src: 'assets/photo7.jpeg', alt: 'Faith and Arome — together' },
+    { src: 'assets/photo8.jpeg', alt: 'Faith and Arome — joyful moment' },
+    { src: 'assets/photo9.jpeg', alt: 'Faith and Arome — romance' },
+    { src: 'assets/photo10.jpeg', alt: 'Faith and Arome — elegance' },
+    { src: 'assets/photo11.jpeg', alt: 'Faith and Arome — loving smile' },
+    { src: 'assets/photo12.jpeg', alt: 'Faith and Arome — cherished memory' },
+    { src: 'assets/photo13.jpeg', alt: 'Faith and Arome — beautiful couple' },
+    { src: 'assets/photo14.jpeg', alt: 'Faith and Arome — holding hands' },
+    { src: 'assets/photo15.jpeg', alt: 'Faith and Arome — together forever' },
+    { src: 'assets/photo16.jpeg', alt: 'Faith and Arome — radiant' },
+    { src: 'assets/photo17.jpeg', alt: 'Faith and Arome — laughter and joy' },
+    { src: 'assets/photo18.jpeg', alt: 'Faith and Arome — embrace' },
+    { src: 'assets/photo19.jpeg', alt: 'Faith and Arome — wedding journey' },
+    { src: 'assets/photo20.jpeg', alt: 'Faith and Arome — forever love' }
+  ];
+
   const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
   const lightbox     = document.getElementById('lightbox');
   const lbImg        = document.getElementById('lightbox-img');
+  const lbWrap       = document.getElementById('lightbox-wrap');
+  const lbCounter    = document.getElementById('lightbox-counter');
   const lbClose      = document.getElementById('lightbox-close');
   const lbPrev       = document.getElementById('lightbox-prev');
   const lbNext       = document.getElementById('lightbox-next');
@@ -133,31 +158,52 @@
 
   let currentIndex = 0;
 
-  // Collect image src and alt from each gallery item
-  const images = galleryItems.map(item => {
-    const img = item.querySelector('img');
-    return { src: img ? img.src : '', alt: img ? img.alt : '' };
-  });
+  function updatePhoto(index, direction = 0) {
+    currentIndex = ((index % ALL_PHOTOS.length) + ALL_PHOTOS.length) % ALL_PHOTOS.length;
+    const photo = ALL_PHOTOS[currentIndex];
+
+    if (lbWrap) {
+      lbWrap.style.opacity = '0';
+      lbWrap.style.transform = direction !== 0 ? `translateX(${direction * 20}px)` : 'scale(0.96)';
+    }
+
+    setTimeout(() => {
+      lbImg.src = photo.src;
+      lbImg.alt = photo.alt;
+      if (lbCounter) {
+        lbCounter.textContent = `${currentIndex + 1} / ${ALL_PHOTOS.length}`;
+      }
+      if (lbWrap) {
+        lbWrap.style.opacity = '1';
+        lbWrap.style.transform = 'translate(0) scale(1)';
+      }
+    }, 100);
+
+    // Preload adjacent images
+    const nextIdx = (currentIndex + 1) % ALL_PHOTOS.length;
+    const prevIdx = (currentIndex - 1 + ALL_PHOTOS.length) % ALL_PHOTOS.length;
+    new Image().src = ALL_PHOTOS[nextIdx].src;
+    new Image().src = ALL_PHOTOS[prevIdx].src;
+  }
 
   function openLightbox(index) {
-    currentIndex = ((index % images.length) + images.length) % images.length;
-    lbImg.src = images[currentIndex].src;
-    lbImg.alt = images[currentIndex].alt;
     lightbox.hidden = false;
     document.body.style.overflow = 'hidden';
-    lbClose.focus();
+    updatePhoto(index, 0);
+    if (lbClose) lbClose.focus();
   }
 
   function closeLightbox() {
     lightbox.hidden = true;
     document.body.style.overflow = '';
-    galleryItems[currentIndex].focus();
+    const origin = galleryItems[Math.min(currentIndex, galleryItems.length - 1)];
+    if (origin) origin.focus();
   }
 
-  function showPrev() { openLightbox(currentIndex - 1); }
-  function showNext() { openLightbox(currentIndex + 1); }
+  function showPrev() { updatePhoto(currentIndex - 1, -1); }
+  function showNext() { updatePhoto(currentIndex + 1, 1); }
 
-  // Open on click
+  // Open on click of any of the 4 displayed photos
   galleryItems.forEach((item, i) => {
     item.addEventListener('click', () => openLightbox(i));
     item.setAttribute('tabindex', '0');
@@ -170,9 +216,9 @@
     });
   });
 
-  lbClose.addEventListener('click', closeLightbox);
-  lbPrev.addEventListener('click', showPrev);
-  lbNext.addEventListener('click', showNext);
+  if (lbClose) lbClose.addEventListener('click', closeLightbox);
+  if (lbPrev) lbPrev.addEventListener('click', showPrev);
+  if (lbNext) lbNext.addEventListener('click', showNext);
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
@@ -184,8 +230,27 @@
 
   // Click backdrop to close
   lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
+    if (e.target === lightbox || e.target === lbWrap) closeLightbox();
   });
+
+  // Touch swipe gestures for mobile slider
+  let touchStartX = 0;
+  let touchStartY = 0;
+  lightbox.addEventListener('touchstart', (e) => {
+    if (!e.touches.length) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    if (!e.changedTouches.length) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    const diffY = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) showNext();
+      else showPrev();
+    }
+  }, { passive: true });
 })();
 
 // ── SMOOTH SCROLL OFFSET FOR FIXED NAV ───────────────────

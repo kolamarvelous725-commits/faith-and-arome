@@ -331,8 +331,8 @@
         <p class="section-subtitle">A glimpse into our journey together, captured by 7bit Shotz</p>
       </div>
 
-      <div class="gallery-masonry fade-up delay-1">
-        <div class="gallery-item gallery-item-tall" data-index="0">
+      <div class="gallery-grid fade-up delay-1">
+        <div class="gallery-item" data-index="0" role="button" tabindex="0" aria-label="View photo 1 of 20">
           <img src="assets/photo1.jpeg" alt="Faith and Arome — romantic portrait session" loading="lazy" decoding="async" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
@@ -340,7 +340,7 @@
             </span>
           </div>
         </div>
-        <div class="gallery-item" data-index="1">
+        <div class="gallery-item" data-index="1" role="button" tabindex="0" aria-label="View photo 2 of 20">
           <img src="assets/photo2.jpeg" alt="Faith and Arome — tender moment" loading="lazy" decoding="async" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
@@ -348,7 +348,7 @@
             </span>
           </div>
         </div>
-        <div class="gallery-item" data-index="2">
+        <div class="gallery-item" data-index="2" role="button" tabindex="0" aria-label="View photo 3 of 20">
           <img src="assets/photo3.jpeg" alt="Faith and Arome — sitting portrait" loading="lazy" decoding="async" />
           <div class="gallery-overlay">
             <span class="gallery-overlay-icon">
@@ -356,38 +356,34 @@
             </span>
           </div>
         </div>
-        <div class="gallery-item gallery-item-tall" data-index="3">
+        <div class="gallery-item gallery-item-more" data-index="3" role="button" tabindex="0" aria-label="View all 20 photos">
           <img src="assets/photo4.jpeg" alt="Faith and Arome — warm portrait" loading="lazy" decoding="async" />
-          <div class="gallery-overlay">
-            <span class="gallery-overlay-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </div>
-        </div>
-        <div class="gallery-item gallery-item-wide" data-index="4">
-          <img src="assets/photo5.jpeg" alt="Faith and Arome — in traditional attire" loading="lazy" decoding="async" />
-          <div class="gallery-overlay">
-            <span class="gallery-overlay-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
+          <div class="gallery-more-overlay">
+            <div class="gallery-more-badge">
+              <span class="gallery-more-count">+16</span>
+              <span class="gallery-more-text">More Photos</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- LIGHTBOX -->
+    <!-- LIGHTBOX SLIDER (All 20 Photos) -->
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
-      <button class="lightbox-close" id="lightbox-close" aria-label="Close photo viewer">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
+      <div class="lightbox-topbar">
+        <span class="lightbox-counter" id="lightbox-counter">1 / 20</span>
+        <button class="lightbox-close" id="lightbox-close" aria-label="Close photo viewer">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
       <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div class="lightbox-img-wrap">
+      <div class="lightbox-img-wrap" id="lightbox-wrap">
         <img id="lightbox-img" src="" alt="" />
       </div>
       <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </section>

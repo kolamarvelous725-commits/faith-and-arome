@@ -732,46 +732,60 @@ ul { list-style: none; }
   background: var(--ivory);
   position: relative;
 }
-.gallery-masonry {
+.gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+@media (min-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
 }
 .gallery-item {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius);
+  border-radius: 16px;
   cursor: pointer;
+  aspect-ratio: 4 / 5;
+  background: #f0ebe6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
+}
+.gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(200, 16, 46, 0.2);
 }
 .gallery-item img {
   width: 100%;
-  height: 280px;
+  height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center top;
   transition: transform 0.6s ease;
   display: block;
 }
-.gallery-item-tall img { height: 420px; }
-.gallery-item-wide { grid-column: span 2; }
-.gallery-item-wide img { height: 280px; object-position: center; }
-
-.gallery-item:hover img { transform: scale(1.07); }
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
 
 .gallery-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(139,0,21,0.55), rgba(200,16,46,0.50));
+  background: linear-gradient(135deg, rgba(139, 0, 21, 0.55), rgba(200, 16, 46, 0.45));
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity var(--transition);
 }
-.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
 .gallery-overlay-icon {
-  width: 44px; height: 44px;
-  border: 1.5px solid rgba(255,255,255,0.8);
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -783,62 +797,146 @@ ul { list-style: none; }
 .gallery-overlay-icon svg { width: 18px; }
 .gallery-item:hover .gallery-overlay-icon { transform: scale(1); }
 
-/* LIGHTBOX */
+/* ── 4TH PHOTO: +16 MORE OVERLAY ── */
+.gallery-item-more .gallery-more-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 5, 10, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.35s ease;
+}
+.gallery-item-more:hover .gallery-more-overlay {
+  background: rgba(139, 0, 21, 0.75);
+}
+.gallery-more-badge {
+  text-align: center;
+  color: #ffffff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.gallery-item-more:hover .gallery-more-badge {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.24);
+}
+.gallery-more-count {
+  display: block;
+  font-family: var(--ff-sans);
+  font-size: clamp(2rem, 5vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+.gallery-more-text {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--ff-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+}
+
+/* ── LIGHTBOX SLIDER ── */
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 2000;
-  background: rgba(10, 4, 20, 0.96);
+  z-index: 5000;
+  background: rgba(8, 4, 10, 0.96);
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  user-select: none;
+  touch-action: pan-y;
 }
 .lightbox[hidden] { display: none; }
+.lightbox-topbar {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+.lightbox-counter {
+  font-family: var(--ff-sans);
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+}
+.lightbox-close {
+  width: 44px; height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.lightbox-close svg { width: 18px; }
+.lightbox-close:hover { background: rgba(200, 16, 46, 0.7); transform: scale(1.05); }
+
 .lightbox-img-wrap {
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .lightbox-img-wrap img {
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 85vh;
   object-fit: contain;
   border-radius: var(--radius);
   box-shadow: 0 30px 100px rgba(0,0,0,0.6);
 }
-.lightbox-close {
-  position: absolute;
-  top: 1.5rem; right: 1.5rem;
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background var(--transition);
-}
-.lightbox-close svg { width: 18px; }
-.lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
 .lightbox-nav {
   position: absolute;
   top: 50%; transform: translateY(-50%);
-  width: 50px; height: 50px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  width: 52px; height: 52px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   color: white;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background var(--transition);
+  z-index: 10;
+  transition: background 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
 }
-.lightbox-nav svg { width: 20px; }
-.lightbox-nav:hover { background: rgba(255,255,255,0.18); }
-.lightbox-prev { left: 1.5rem; }
-.lightbox-next { right: 1.5rem; }
+.lightbox-nav svg { width: 22px; }
+.lightbox-nav:hover {
+  background: rgba(200, 16, 46, 0.7);
+  border-color: rgba(200, 16, 46, 0.9);
+  transform: translateY(-50%) scale(1.08);
+}
+.lightbox-prev { left: 1.25rem; }
+.lightbox-next { right: 1.25rem; }
+@media (max-width: 600px) {
+  .lightbox-prev { left: 0.5rem; width: 42px; height: 42px; }
+  .lightbox-next { right: 0.5rem; width: 42px; height: 42px; }
+}
 
 /* ============================================================
    INVITATION CARD PREVIEW
