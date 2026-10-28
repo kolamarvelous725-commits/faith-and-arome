@@ -46,7 +46,6 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
-  decoding: async; /* async image decode — doesn't block main thread */
 }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
@@ -59,7 +58,6 @@ ul { list-style: none; }
 #invitation-details,
 #behind-the-scenes,
 #schedule,
-#gallery,
 #dress-code,
 #ending {
   content-visibility: auto;
@@ -928,9 +926,11 @@ ul { list-style: none; }
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 16px 64px rgba(0,0,0,0.75);
+  border-radius: 10px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.06);
   display: block;
+  /* Subtle entrance scale via JS transition */
+  transition: box-shadow 0.25s ease;
 }
 
 /* ── Nav arrows ── */

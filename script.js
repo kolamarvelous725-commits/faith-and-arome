@@ -221,12 +221,17 @@
     new Image().src = ALL_PHOTOS[prevIdx].src;
   }
 
+  let scrollY = 0;
+
   function openLightbox(index) {
-    lightbox.hidden = false;
+    scrollY = window.scrollY;
+    // Lock scroll on iOS Safari requires position:fixed trick
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
-    // Force the lightbox to always anchor to the viewport top
-    lightbox.scrollTop = 0;
-    // Small delay so hidden→visible transition works
+
+    lightbox.hidden = false;
     requestAnimationFrame(() => {
       lightbox.classList.add('lb-open');
     });
@@ -238,7 +243,12 @@
     lightbox.classList.remove('lb-open');
     setTimeout(() => {
       lightbox.hidden = true;
+      // Restore scroll
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
       document.body.style.overflow = '';
+      window.scrollTo(0, scrollY);
     }, 320);
     const origin = galleryItems[Math.min(currentIndex, galleryItems.length - 1)];
     if (origin) origin.focus();
