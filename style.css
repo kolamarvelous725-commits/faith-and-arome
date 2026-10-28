@@ -853,69 +853,74 @@ ul { list-style: none; }
   inset: 0;
   z-index: 5000;
   background: rgba(6, 3, 8, 0.98);
-  display: block;
+  /* Use flex-column so children stack: topbar / image / filmstrip */
+  display: flex;
+  flex-direction: column;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  -webkit-user-select: none;
   user-select: none;
+  touch-action: pan-y;
   overflow: hidden;
-  /* Fade-in animation */
+  /* Fade-in */
   opacity: 0;
   transition: opacity 0.32s ease;
+  /* iOS safe-area */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.lightbox.lb-open {
-  opacity: 1;
-}
-.lightbox[hidden] { display: none; }
+.lightbox.lb-open  { opacity: 1; }
+.lightbox[hidden]  { display: none; }
+
+/* ── Top bar ── */
 .lightbox-topbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  padding: 0 1.5rem;
+  flex-shrink: 0;
+  height: 60px;
+  padding: 0 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 20;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 100%);
 }
 .lightbox-counter {
   font-family: var(--ff-sans);
-  font-size: 0.9rem;
-  letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.9);
-  padding: 0.4rem 1rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.9);
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
   backdrop-filter: blur(6px);
+  white-space: nowrap;
 }
 .lightbox-close {
-  width: 44px; height: 44px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  width: 42px; height: 42px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 50%;
-  color: white;
+  color: #fff;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.25s ease, transform 0.2s ease;
+  z-index: 21;
 }
-.lightbox-close svg { width: 18px; }
-.lightbox-close:hover { background: rgba(200, 16, 46, 0.75); transform: scale(1.08); }
+.lightbox-close svg { width: 17px; }
+.lightbox-close:hover { background: rgba(200,16,46,0.8); transform: scale(1.1); }
 
-/* ── Image wrap: absolute layer, pointer-events:none so arrows below are always clickable ── */
+/* ── Image area: takes all remaining vertical space ── */
 .lightbox-img-wrap {
-  position: absolute;
-  top: 64px;        /* below topbar */
-  bottom: 84px;     /* above filmstrip */
-  left: 0;
-  right: 0;
+  flex: 1 1 0;
+  min-height: 0;           /* critical — lets flex child shrink below content size */
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 4.5rem; /* horizontal gap for arrows */
+  /* Side padding = arrow width + small gap so image never hides behind arrows */
+  padding: 0.5rem 72px;
   transition: opacity 0.18s ease, transform 0.18s ease;
-  pointer-events: none; /* let clicks pass through to arrows */
+  pointer-events: none;    /* pass arrow clicks through */
 }
 .lightbox-img-wrap img {
   max-width: 100%;
@@ -929,81 +934,79 @@ ul { list-style: none; }
   pointer-events: auto;
 }
 
-/* ── Nav arrows: always above image wrap, centred in image area ── */
+/* ── Nav arrows: stretch vertically across image area ── */
 .lightbox-nav {
   position: absolute;
-  top: calc(64px + (100vh - 64px - 84px) / 2);
-  transform: translateY(-50%);
-  width: 52px; height: 52px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
+  top: 60px;              /* below topbar */
+  bottom: 76px;           /* above filmstrip */
+  width: 56px;
+  background: transparent;
+  border: none;
   color: white;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   z-index: 15;
-  transition: background 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+  transition: color 0.2s ease;
 }
-.lightbox-nav svg { width: 22px; }
-.lightbox-nav:hover {
-  background: rgba(200, 16, 46, 0.8);
-  border-color: rgba(200, 16, 46, 0.9);
-  transform: translateY(-50%) scale(1.1);
+/* Inner circle badge on the arrow icon */
+.lightbox-nav svg {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  padding: 10px;
+  flex-shrink: 0;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
 }
-.lightbox-prev { left: 1rem; }
-.lightbox-next { right: 1rem; }
+.lightbox-nav:hover svg {
+  background: rgba(200,16,46,0.85);
+  border-color: rgba(200,16,46,0.9);
+  transform: scale(1.1);
+}
+.lightbox-prev { left: 0; }
+.lightbox-next { right: 0; }
 
-/* ── Filmstrip: pinned to bottom of lightbox ── */
+/* ── Filmstrip: fixed height at bottom ── */
 .lightbox-filmstrip {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 84px;
-  padding: 0.5rem 1rem;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(200,16,46,0.6) rgba(255,255,255,0.05);
-  background: rgba(0, 0, 0, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 20;
+  flex-shrink: 0;
+  height: 76px;
+  padding: 0.4rem 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200,16,46,0.55) rgba(255,255,255,0.04);
+  background: rgba(0,0,0,0.55);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 20;
 }
-.lightbox-filmstrip::-webkit-scrollbar {
-  height: 3px;
-}
+.lightbox-filmstrip::-webkit-scrollbar { height: 3px; }
 .lightbox-filmstrip::-webkit-scrollbar-thumb {
-  background: rgba(200, 16, 46, 0.6);
+  background: rgba(200,16,46,0.55);
   border-radius: 2px;
 }
 .lb-thumb {
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
+  width: 52px; height: 52px;
+  border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
-  opacity: 0.5;
-  transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  opacity: 0.45;
+  transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.18s ease;
   background: none;
   padding: 0;
 }
-.lb-thumb:hover {
-  opacity: 0.85;
-  transform: scale(1.06);
-}
+.lb-thumb:hover  { opacity: 0.85; transform: scale(1.06); }
 .lb-thumb-active {
   opacity: 1;
   border-color: var(--purple);
-  transform: scale(1.08);
-  box-shadow: 0 0 0 2px rgba(200,16,46,0.4);
+  transform: scale(1.07);
+  box-shadow: 0 0 0 2px rgba(200,16,46,0.3);
 }
 .lb-thumb img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -1011,12 +1014,27 @@ ul { list-style: none; }
   box-shadow: none;
 }
 
-@media (max-width: 600px) {
-  .lightbox-prev { left: 0.4rem; width: 40px; height: 40px; }
-  .lightbox-next { right: 0.4rem; width: 40px; height: 40px; }
-  .lightbox-img-wrap { padding: 0.5rem 3rem; bottom: 72px; }
-  .lb-thumb { width: 46px; height: 46px; }
-  .lightbox-filmstrip { height: 72px; }
+/* ── Mobile: tighten everything for small screens ── */
+@media (max-width: 480px) {
+  .lightbox-topbar  { height: 52px; padding: 0 1rem; }
+  .lightbox-counter { font-size: 0.75rem; padding: 0.25rem 0.65rem; }
+  .lightbox-close   { width: 36px; height: 36px; }
+  .lightbox-close svg { width: 15px; }
+  /* Side padding = nav width (44px) + 4px gap */
+  .lightbox-img-wrap { padding: 0.4rem 48px; }
+  .lightbox-nav  { width: 44px; top: 52px; bottom: 68px; }
+  .lightbox-nav svg { width: 36px; height: 36px; padding: 8px; }
+  .lightbox-filmstrip { height: 68px; padding: 0.35rem 0.6rem; gap: 0.3rem; }
+  .lb-thumb { width: 44px; height: 44px; }
+}
+
+/* ── Tablet: slightly larger arrows ── */
+@media (min-width: 768px) {
+  .lightbox-nav svg { width: 48px; height: 48px; padding: 12px; }
+  .lightbox-nav  { width: 64px; }
+  .lightbox-img-wrap { padding: 0.75rem 80px; }
+  .lb-thumb { width: 58px; height: 58px; }
+  .lightbox-filmstrip { height: 82px; }
 }
 
 /* ============================================================
